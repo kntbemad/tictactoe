@@ -1,5 +1,5 @@
 const gameBoard = (function () {
-    const board = [[".", ".", "."], [".", ".", "."], [".", ".", "."]];
+    const board = [["", "", ""], ["", "", ""], ["", "", ""]];
 
     // build board on html page
     const divBoard = document.getElementById("board");
@@ -140,7 +140,7 @@ const gameController = (function () {
                 console.log(row + " " + column);
                 playTurn(gBoard.board, row, column, currPlayer);
                 gBoard.update();
-                
+
                 if (gameWon) {
                     let victoryText = document.createElement("p");
                     victoryText.textContent = "Player " + currPlayer.number + " has won the game!";
