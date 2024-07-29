@@ -3,6 +3,7 @@ const gameBoard = (function () {
 
     // build board on html page
     const divBoard = document.getElementById("board");
+    
 
     const boardRows = [document.createElement("div"), document.createElement("div"), document.createElement("div")];
 
@@ -14,7 +15,7 @@ const gameBoard = (function () {
             square.id = "square" + i + j
             square.classList.add("squarebtn");
             square.addEventListener("click", e => {
-                
+
             });
             boardRows[i].appendChild(square);
         }
@@ -51,6 +52,10 @@ function createPlayer(number, type) {
 
 const gameController = (function () {
     let gameWon = false;
+    const turnTextDiv = document.getElementById("turntext");
+    const turnText = document.createElement("p");
+    turnText.textContent = "Player 1's turn (X)";
+    turnTextDiv.appendChild(turnText);
 
     const printBoard = (a) => {
         for (i = 0; i < 3; i++) {
@@ -125,24 +130,34 @@ const gameController = (function () {
     const playGame = (gBoard) => {
         const player1 = createPlayer(1, "X");
         const player2 = createPlayer(2, "O");
+        let currPlayer = player1;
 
-        //gameloop
-        let count = 0;
-        while (!gameWon) {
+        let squares = document.querySelectorAll(".squarebtn");
+        squares.forEach(b => {
+            b.addEventListener("click", e => {
+                let row = b.id.slice(-2, -1);
+                let column = b.id.slice(-1);
+                console.log(row + " " + column);
+                playTurn(gBoard.board, row, column, currPlayer);
+                gBoard.update();
+                
+                if (gameWon) {
+                    let victoryText = document.createElement("p");
+                    victoryText.textContent = "Player " + currPlayer.number + " has won the game!";
+                    document.querySelector("#board").appendChild(victoryText);
+                    return;
+                }
 
-            gBoard.update();
-            printBoard(gBoard.board);
-            playTurn(gBoard.board, 0, 2, player1);
-            playTurn(gBoard.board, 1, 1, player1);
-            playTurn(gBoard.board, 2, 0, player1);
-
-            if (count > 20) {
-                gameWon = true;
-                return;
-            }
-            count++;
-            gBoard.update();
-        }
+                if (currPlayer.type === "X") {
+                    currPlayer = player2;
+                    turnText.textContent = "Player 2's turn (O)";
+                } else {
+                    currPlayer = player1;
+                    turnText.textContent = "Player 1's turn (X)";
+                }
+                
+            });
+        });
 
     }
 

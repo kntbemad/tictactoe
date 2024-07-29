@@ -7,6 +7,11 @@
     gap: 10px;
 }
 
+#turntext{
+    display: flex;
+    justify-content: center;
+}
+
 .boardrow {
     display: flex;
     gap: 10px;
