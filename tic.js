@@ -3,7 +3,7 @@ const gameBoard = (function () {
 
     // build board on html page
     const divBoard = document.getElementById("board");
-    
+
 
     const boardRows = [document.createElement("div"), document.createElement("div"), document.createElement("div")];
 
@@ -138,8 +138,40 @@ const gameController = (function () {
                 let row = b.id.slice(-2, -1);
                 let column = b.id.slice(-1);
                 console.log(row + " " + column);
-                playTurn(gBoard.board, row, column, currPlayer);
-                gBoard.update();
+                if (gBoard.board[row][column] === "") {
+                    playTurn(gBoard.board, row, column, currPlayer);
+                    gBoard.update();
+
+                    let tie = true;
+                    gBoard.board.forEach(element => {
+                        element.forEach(e => {
+                            console.log(e);
+                            if (e !== "X" && e !== "O") {
+                                tie = false;
+                            }
+                        });
+
+
+                    });
+
+                    if (tie) {
+                        let victoryText = document.createElement("p");
+                        victoryText.textContent = "The game has ended in a tie...";
+                        document.querySelector("#board").appendChild(victoryText);
+                        return;
+                    }
+
+                    if (currPlayer.type === "X") {
+                        currPlayer = player2;
+                        turnText.textContent = "Player 2's turn (O)";
+                    } else {
+                        currPlayer = player1;
+                        turnText.textContent = "Player 1's turn (X)";
+                    }
+                } else {
+                    turnText.textContent = "Player " + currPlayer.number + " that is not a valid move.";
+                };
+
 
                 if (gameWon) {
                     let victoryText = document.createElement("p");
@@ -148,14 +180,10 @@ const gameController = (function () {
                     return;
                 }
 
-                if (currPlayer.type === "X") {
-                    currPlayer = player2;
-                    turnText.textContent = "Player 2's turn (O)";
-                } else {
-                    currPlayer = player1;
-                    turnText.textContent = "Player 1's turn (X)";
-                }
-                
+
+
+
+
             });
         });
 
